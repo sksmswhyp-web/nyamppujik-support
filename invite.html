@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>냠냠뿌직 친구 초대</title>
+<title>냠냠뿌직 친구 번호</title>
 <meta name="robots" content="noindex">
 <style>
 :root{--bg:#fff4e4;--paper:#fffaf2;--ink:#4a2f2a;--soft:#8a6a5f;--pink:#ff8fa3;--yellow:#ffd36e;--shadow:#e8cdb4}
@@ -25,34 +25,36 @@ small{display:block;font-size:12px;color:var(--soft);line-height:1.7;margin-top:
 <body>
 <div class="card">
   <img id="ny" alt="냠이" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAcCAYAAAB2+A+pAAAA7klEQVR42s2WzQ3CMAyFMwsHhugSbAITMEKvXNmBYThy4dIzCwQpUmhqnOT5YQqVnqq2dr7EP01CWOGKu30s72EtqNRP4E3DYbuJpawgzR+CxvNlIQuc9m85ypVoK3MFZ2ftPWIDRwyBoDLXSIJfb7O+Aa3miQT26kMN6+LZAazlPsE982mKwl+Dc2487brtU37zsrP37n1qi22vKrwHBCbQ7OkX+DDOYsFiDDtYGVhuDiqcAnfCDIGZ3ycCzqtBwPzu9EFxUbvT43hKsoKzH3NseoMjEyht3aCMKHgLLKvaHSwHrR13LbbUGdnT9gkv3UgBUQf25wAAAABJRU5ErkJggg==">
-  <h1 id="title">냠냠뿌직 친구 초대</h1>
-  <p id="desc">친구가 초대를 보냈어요!<br>서로 먹은 음식을 볼 수 있어요.</p>
-  <div class="code" id="code">--------</div>
+  <h1 id="title">냠냠뿌직 친구 번호</h1>
+  <p id="desc">친구가 번호를 보냈어요!<br>앱에서 열면 바로 친구가 돼요.</p>
+  <div class="code" id="code">----------</div>
   <a class="btn pink" id="open" href="#">앱에서 열기</a>
   <a class="btn" href="https://apps.apple.com/kr/app/%EB%83%A0%EB%83%A0%EB%BF%8C%EC%A7%81/id6821324359">앱이 없으면 App Store에서 받기</a>
   <div class="steps">
     <b>앱이 안 열리면</b><br>
-    ① 위 코드를 복사해요 <button id="copy" style="font:inherit;font-size:12px;border:2px solid #4a2f2a;background:#fff;padding:1px 8px;cursor:pointer">코드 복사</button><br>
-    ② 냠냠뿌직 › 친구 탭 › ‘친구 코드’ 칸에 붙여넣고 <b>코드로 추가</b><br>
+    ① 위 번호를 복사해요 <button id="copy" style="font:inherit;font-size:12px;border:2px solid #4a2f2a;background:#fff;padding:1px 8px;cursor:pointer">번호 복사</button><br>
+    ② 냠냠뿌직 › 친구 탭 › ‘친구 번호’ 칸에 붙여넣고 <b>추가</b><br>
     ③ 카카오톡에서 열었다면 오른쪽 아래 ⋯ › <b>다른 브라우저로 열기</b>
   </div>
-  <small>초대는 한 번만 쓸 수 있고 7일 뒤 사라져요.<br>iPhone 전용 앱이에요.</small>
+  <small>번호를 받은 친구만 추가할 수 있어요. 모르는 사람에게는 알려주지 마세요.<br>iPhone 전용 앱이에요.</small>
 </div>
 <script>
-  var c = (new URLSearchParams(location.search).get('c') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  var ok = c.length === 8;
-  document.getElementById('code').textContent = ok ? c : '코드 없음';
+  var q = new URLSearchParams(location.search);
+  var n = (q.get('n') || '').replace(/[^0-9]/g, ''), old = (q.get('c') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var ok = n.length === 10, oldOk = !ok && old.length === 8;
+  var shown = ok ? n.replace(/^(\d{3})(\d{3})(\d{4})$/, '$1-$2-$3') : (oldOk ? old : '번호 없음');
+  document.getElementById('code').textContent = shown;
   var open = document.getElementById('open');
-  if (!ok) { document.getElementById('desc').textContent = '초대 링크가 올바르지 않아요. 친구에게 다시 받아주세요.'; open.style.display = 'none'; }
+  if (!ok && !oldOk) { document.getElementById('desc').textContent = '링크가 올바르지 않아요. 친구에게 다시 받아주세요.'; open.style.display = 'none'; }
   else {
-    var url = 'nyamppujik://invite?c=' + c;
+    var url = ok ? 'nyamppujik://friend?n=' + n : 'nyamppujik://invite?c=' + old;
     open.href = url;
     if (/iPhone|iPad|iPod/i.test(navigator.userAgent) && !/KAKAOTALK/i.test(navigator.userAgent)) setTimeout(function () { location.href = url; }, 400);
   }
   document.getElementById('copy').onclick = function () {
-    if (!ok) return;
-    var b = this;
-    (navigator.clipboard ? navigator.clipboard.writeText(c) : Promise.reject()).then(function () { b.textContent = '복사됨!'; }, function () { prompt('코드를 복사하세요', c); });
+    if (!ok && !oldOk) return;
+    var v = ok ? n : old, b = this;
+    (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function () { b.textContent = '복사됨!'; }, function () { prompt('복사하세요', v); });
   };
 </script>
 </body>
