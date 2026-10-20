@@ -29,14 +29,14 @@ small{display:block;font-size:12px;color:var(--soft);line-height:1.7;margin-top:
   <p id="desc">친구가 번호를 보냈어요!<br>앱에서 열면 바로 친구가 돼요.</p>
   <div class="code" id="code">----------</div>
   <a class="btn pink" id="open" href="#">앱에서 열기</a>
-  <a class="btn" href="https://apps.apple.com/kr/app/%EB%83%A0%EB%83%A0%EB%BF%8C%EC%A7%81/id6821324359">앱이 없으면 App Store에서 받기</a>
+  <a class="btn" id="store" href="https://apps.apple.com/kr/app/%EB%83%A0%EB%83%A0%EB%BF%8C%EC%A7%81/id6821324359">앱이 없으면 App Store에서 받기</a>
   <div class="steps">
     <b>앱이 안 열리면</b><br>
     ① 위 번호를 복사해요 <button id="copy" style="font:inherit;font-size:12px;border:2px solid #4a2f2a;background:#fff;padding:1px 8px;cursor:pointer">번호 복사</button><br>
     ② 냠냠뿌직 › 친구 탭 › ‘친구 번호’ 칸에 붙여넣고 <b>추가</b><br>
     ③ 카카오톡에서 열었다면 오른쪽 아래 ⋯ › <b>다른 브라우저로 열기</b>
   </div>
-  <small>번호를 받은 친구만 추가할 수 있어요. 모르는 사람에게는 알려주지 마세요.<br>iPhone 전용 앱이에요.</small>
+  <small>번호를 받은 친구만 추가할 수 있어요. 모르는 사람에게는 알려주지 마세요.</small>
 </div>
 <script>
   var q = new URLSearchParams(location.search);
@@ -49,8 +49,9 @@ small{display:block;font-size:12px;color:var(--soft);line-height:1.7;margin-top:
   else {
     var url = ok ? 'nyamppujik://friend?n=' + n : 'nyamppujik://invite?c=' + old;
     open.href = url;
-    if (/iPhone|iPad|iPod/i.test(navigator.userAgent) && !/KAKAOTALK/i.test(navigator.userAgent)) setTimeout(function () { location.href = url; }, 400);
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent) && !/KAKAOTALK/i.test(navigator.userAgent)) setTimeout(function () { location.href = url; }, 400);
   }
+  if (/Android/i.test(navigator.userAgent)) { var st = document.getElementById('store'); st.href = 'https://play.google.com/store/apps/details?id=com.nyamppujik.app'; st.textContent = '앱이 없으면 Google Play에서 받기'; }
   document.getElementById('copy').onclick = function () {
     if (!ok && !oldOk) return;
     var v = ok ? n : old, b = this;
